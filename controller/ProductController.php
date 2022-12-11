@@ -21,21 +21,18 @@ class ProductController extends MyController
         if ($_SERVER['REQUEST_METHOD'] == "GET") {
             $this->loadView('products/insert');
         } elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
-            $inputCode = $_POST["productCode"];
-            $inputName = $_POST["productName"];
+            $this->validate();
+            import('core/Image');
+            $image = new Image($_FILES['image']);
+            $imageUrl = $image->move('public/uploads');
+            $inputCode = $_POST["product_code"];
+            $inputName = $_POST["product_name"];
             $inputPrice = $_POST["price"];
-            $this->productModel->insert($inputCode, $inputName, $inputPrice);
-            redirect(route('product-list'));
+            $inputImage = $imageUrl === false ? '' : $imageUrl;
+            $this->productModel->insert($inputCode, $inputName, $inputPrice, $inputImage);
+            redirect(route('products list'));
         }
     }
-
-//    public function editProduct($productId) {
-//        $product = [];
-//        if (!empty($productId)) {
-//            $product = $this->productModel->getProductById($productId);
-//        }
-//        return $product;
-//    }
 
     public function update()
     {
@@ -48,13 +45,17 @@ class ProductController extends MyController
             $data['product'] = $arr[0];
             $this->loadView('products/update', $data);
         } elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
-
+            $this->validate();
+            import('core/Image');
+            $image = new Image($_FILES['image']);
+            $imageUrl = $image->move('public/uploads');
             $id = $_POST["product_id"];
-            $inputCode = $_POST["product_code"] ?? '';
-            $inputName = $_POST["product_name"] ?? '';
-            $inputPrice = $_POST["price"] ?? '';
-            $this->productModel->update($id, $inputCode, $inputName, $inputPrice);
-            redirect(route('product-list'));
+            $inputCode = $_POST["product_code"];
+            $inputName = $_POST["product_name"];
+            $inputPrice = $_POST["price"];
+            $inputImage = $imageUrl === false ? '' : $imageUrl; 
+            $this->productModel->update($id, $inputCode, $inputName, $inputPrice, $inputImage);
+            redirect(route('products list'));
         }
     }
 
@@ -65,7 +66,7 @@ class ProductController extends MyController
             $productId = $_GET["product_id"];
             if ($_SERVER['REQUEST_METHOD'] == "GET") {
                 $this->productModel->delete($productId);
-                redirect(route('product-list'));
+                redirect(route('products list'));
             }
         }
     }
@@ -85,9 +86,15 @@ class ProductController extends MyController
     }
 
     public function validate(){
-        if ($_GET['product-code']= '' || $_GET['product-name'] ="" || $_GET['price']=""){
-        redirect(route($_SERVER['HTTP_REFERER']));
-    
-        }
+        if ($_POST['product_code']== "" || $_POST['product_name'] =="" || $_POST['price']==""){
+            SessionFlash::setSessionFlash('errMessage' , 'Vui lòng không để trống'); 
+            // redirect(route($_SERVER['HTTP_REFERER']));  
+            // header($_SERVER['HTTP_REFERER']); 
+            //Lấy được ulr trước đó.
+            //Redirect về ulr đó
+            $url = $_SERVER['HTTP_REFERER'];
+            redirect($url);
+        } 
     }
+
 }

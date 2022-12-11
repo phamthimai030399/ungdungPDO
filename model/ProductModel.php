@@ -9,7 +9,7 @@ class ProductModel extends MyModel
     public function getAll(): array
     {
 
-        $stmt = $this->conn->prepare("SELECT id , product_code, product_name, price FROM products ");
+        $stmt = $this->conn->prepare("SELECT * FROM products ");
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         return $stmt->fetchAll();
@@ -21,10 +21,10 @@ class ProductModel extends MyModel
      * @param $price
      * @return void
      */
-    public function insert($product_code, $product_name, $price)
+    public function insert($product_code, $product_name, $price, $image)
     {
-        $sql = "INSERT INTO products (`product_code`, `product_name` , `price`)
-    VALUES ('$product_code' , '$product_name', $price)";
+        $sql = "INSERT INTO products (`product_code`, `product_name` , `price`, `image`)
+    VALUES ('$product_code' , '$product_name', $price, '$image')";
         $this->conn->exec($sql);
     }
 
@@ -36,8 +36,8 @@ class ProductModel extends MyModel
         return $arr;
     }
 
-    public function update($id , $product_code , $product_name , $price){
-        $sql = "UPDATE products SET product_code = '$product_code' , product_name = '$product_name' , price = $price WHERE id=$id";;
+    public function update($id , $product_code , $product_name , $price , $image){
+        $sql = "UPDATE products SET product_code = '$product_code' , product_name = '$product_name' , price = $price , `image` = '$image' WHERE id=$id";;
         $this->conn->exec($sql);
     }
 
@@ -58,4 +58,3 @@ class ProductModel extends MyModel
         return $arr;
     }
 }
-

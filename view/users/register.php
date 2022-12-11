@@ -19,7 +19,7 @@
         <?php endif; ?>
 
         <button type="submit" class="btn btn-primary">Register</button>
-        <a href="<?php echo route('user-login') ?>" class="btn btn-danger">Cancel</a>
+        <a href="<?php echo route('login') ?>" class="btn btn-danger">Cancel</a>
     </form>
 
 </div>

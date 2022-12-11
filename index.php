@@ -1,58 +1,51 @@
 <?php
-require_once("core/common.php");
-require_once("core/MyController.php");
-require_once("core/MyModel.php");
-require_once("middleware/User.php");
-
-require_once("controller/ProductController.php");
-require_once("controller/UserController.php");
-
+require_once('autoload.php');
 
 $route = [
     [
-        'source' => 'user-login',
+        'source' => 'login',
         'controller' => new UserController(),
         'function' => 'checkLogin',
         'is_auth' => false,
         'name' => 'login'
     ],
     [
-        'source' => 'user-register',
+        'source' => 'register',
         'controller' => new UserController(),
         'function' => 'insertUser',
         'is_auth' => false,
         'name' => 'register'
     ],
     [
-        'source' => 'user-logout',
+        'source' => 'logout',
         'controller' => new UserController(),
         'function' => 'logOut',
         'is_auth' => false,
         'name' => 'logout'
     ],
     [
-        'source' => 'product-list',
+        'source' => 'product/list',
         'controller' => new ProductController(),
         'function' => 'list',
         'is_auth' => true,
-        'name' => 'products danh sach'
+        'name' => 'products list'
     ],
     [
-        'source' => 'product-insert',
+        'source' => 'product/insert',
         'controller' => new ProductController(),
         'function' => 'insert',
         'is_auth' => true,
         'name' => 'products insert'
     ],
     [
-        'source' => 'product-update',
+        'source' => 'product/update',
         'controller' => new ProductController(),
         'function' => 'update',
         'is_auth' => true,
         'name' => 'products update'
     ],
     [
-        'source' => 'product-delete',
+        'source' => 'product/delete',
         'controller' => new ProductController(),
         'function' => 'delete',
         'is_auth' => true,

@@ -17,7 +17,7 @@
         <?php endif; ?>
 
         <button type="submit" class="btn btn-primary">Log in</button>
-        <a href="<?php echo route('user-register') ?>">Đăng kí tài khoản mới
+        <a href="<?php echo route('register') ?>">Đăng kí tài khoản mới
     </form>
 
 </div>
