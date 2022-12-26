@@ -38,22 +38,26 @@ class ProductController extends MyController
     {
         if ($_SERVER['REQUEST_METHOD'] == "GET") {
             $productId = $_GET["product_id"];
-            $arr = $this->productModel->getById($productId);
-            if (count($arr) != 1) {
+            $data['product'] = $this->productModel->getById($productId);
+            if (empty($data['product'])) {
                 die("Không tồn tại product này");
             }
-            $data['product'] = $arr[0];
             $this->loadView('products/update', $data);
         } elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
             $this->validate();
             import('core/Image');
             $image = new Image($_FILES['image']);
-            $imageUrl = $image->move('public/uploads');
+            if ($image->isImage()) {
+                $imageUrl = $image->move('public/uploads');
+            } else {
+                $imageUrl = false;
+            }
             $id = $_POST["product_id"];
             $inputCode = $_POST["product_code"];
             $inputName = $_POST["product_name"];
             $inputPrice = $_POST["price"];
-            $inputImage = $imageUrl === false ? '' : $imageUrl; 
+            $oldProduct = $this->productModel->getById($id);
+            $inputImage = $imageUrl === false ? $oldProduct['image'] : $imageUrl; 
             $this->productModel->update($id, $inputCode, $inputName, $inputPrice, $inputImage);
             redirect(route('products list'));
         }
@@ -87,13 +91,11 @@ class ProductController extends MyController
 
     public function validate(){
         if ($_POST['product_code']== "" || $_POST['product_name'] =="" || $_POST['price']==""){
-            SessionFlash::setSessionFlash('errMessage' , 'Vui lòng không để trống'); 
             // redirect(route($_SERVER['HTTP_REFERER']));  
             // header($_SERVER['HTTP_REFERER']); 
             //Lấy được ulr trước đó.
             //Redirect về ulr đó
-            $url = $_SERVER['HTTP_REFERER'];
-            redirect($url);
+            redirectBack(['errMessage' => 'Data invalid.']);
         } 
     }
 

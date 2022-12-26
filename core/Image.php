@@ -10,13 +10,16 @@ class Image
 
     function isImage()
     {
+        if (empty($this->source["tmp_name"])) {
+            return false;
+        }
         $check = getimagesize($this->source["tmp_name"]);
         return !($check === false);
     }
 
     function limitSize($size)
     {
-        return $this->source['size'] > $size;
+        return $this->source['size'] <= $size;
     }
 
     function limitType($types)
@@ -44,12 +47,13 @@ class Image
     function move($dir, $fileName = null)
     {
         $fileName = $fileName ?? basename($this->source["name"]);
+        $fileNameTmp = $fileName;
         $index = 0;
-        while($this->isExist($dir, $fileName)) {
+        while($this->isExist($dir, $fileNameTmp)) {
             $index++;
-            $fileName = $index . '_' . $fileName;
+            $fileNameTmp = $index . '_' . $fileName;
         }
-        $targetFile = $dir . '/' . $fileName;
+        $targetFile = $dir . '/' . $fileNameTmp;
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
         }

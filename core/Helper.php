@@ -3,6 +3,13 @@ function redirect($url) {
     header("Location: " . $url);
     exit();
 }
+function redirectBack($data) {
+    $url = $_SERVER['HTTP_REFERER'];
+    foreach($data as $key => $value) {
+        SessionFlash::setSessionFlash($key, $value);
+    }
+    redirect($url);
+}
 function route($name) {
     global $route;
     $thisRoute = null;

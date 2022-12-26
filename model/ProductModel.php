@@ -33,7 +33,7 @@ class ProductModel extends MyModel
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $arr = $stmt->fetchAll();
-        return $arr;
+        return count($arr) == 1 ? $arr[0] : null;
     }
 
     public function update($id , $product_code , $product_name , $price , $image){

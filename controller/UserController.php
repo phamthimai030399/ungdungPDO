@@ -56,6 +56,9 @@ class UserController extends MyController
             $inputPassword = $_POST["password"];
             $this->userModel->insertUser($inputName, $inputPassword);
             $_SESSION["login_message"] = "Đăng ký thành công. Vui lòng đăng nhập tài khoản";
+            import('core/Mail');
+            $mail = new Mail('mai.pham.tda@gmail.com', 'New user', 'new user register');
+            $mail->send();
             redirect(route('login'));
         }
     }

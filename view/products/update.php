@@ -20,7 +20,9 @@
         <div class="form-group">
             <label for="pwd">Image:</label>
             <input type="file" class="form-control-file border" placeholder="Image" name="image"
-                value="<?php echo $product["image"] ?>" required>
+                value="">
+                <!-- <span><?php echo $product['image'] ?></span> -->
+            <img src="<?php echo $product['image'] ?>" alt="" srcset="" style="width: 100px">
         </div>
         <?php if (SessionFlash::hasSessionFlash('errMessage')) : ?>
             <p style="color: brown"><?php echo SessionFlash::getSessionFlash('errMessage') ?></p>
